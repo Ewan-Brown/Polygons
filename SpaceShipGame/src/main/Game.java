@@ -18,9 +18,7 @@ import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.Random;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
@@ -34,7 +32,7 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 	static Random rand = new Random();
 	BitSet keySet = new BitSet(256);
 	public static Game game;
-	ArrayList<Entity> entities = new ArrayList<Entity>();
+	ArrayList<Ship> entities = new ArrayList<Ship>();
 	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	public Point p2 = new Point(0,0);
 	Timer t;
@@ -44,7 +42,7 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		game = new Game();
 		frame.add(game);
-		frame.setSize(500,500);
+		frame.setSize(1920,1080);
 		frame.setVisible(true);
 		frame.addKeyListener(game);
 		frame.addMouseListener(game);
@@ -74,18 +72,20 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 		t.start();
 		ship = new Ship(0,0);
 		EnemyCache.loadCache();
-		int n = 10;
+		int n = 1;
 		for(int i = 0; i < n;i++){
 			Enemy e = randomEnemy();
 			e.setPosition(rand.nextInt(getWidth()),rand.nextInt(getHeight()));
-			e.team = 1;
+			e.team = 2;
+			e.c = Color.BLUE;
 			entities.add(e);
 		}
 		for(int i = 0; i < n;i++){
-//			Enemy e = randomEnemy();
-//			e.setPosition(rand.nextInt(getWidth()),rand.nextInt(getHeight()));
-//			e.team = 3;
-//			entities.add(e);
+			Enemy e = randomEnemy();
+			e.setPosition(rand.nextInt(getWidth()),rand.nextInt(getHeight()));
+			e.team = 3;
+			e.c = Color.RED;
+			entities.add(e);
 		}
 		entities.add(ship);
 	}
@@ -100,26 +100,27 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
 				RenderingHints.VALUE_ANTIALIAS_ON);;
-		g2d.setColor(Color.BLUE);
-		g2d.setColor(Color.RED);
-		for(int i = 0; i < entities.size();i++){
-			Entity e = entities.get(i);
-			g2d.setColor(e.c);
-			g2d.fillPolygon(e.getRotatedPolygon());
-		}
-		for(int i = 0; i < bullets.size();i++){
-			g2d.setColor(Color.BLUE);
-			Bullet e = bullets.get(i);
-			g2d.fillPolygon(e.getRotatedPolygon());
-		}
-		g2d.setColor(Color.BLUE);
-		g2d.drawString(ship.health + "", getWidth() / 2,  getHeight() / 2);
+				g2d.setColor(Color.BLUE);
+				g2d.setColor(Color.RED);
+				for(int i = 0; i < entities.size();i++){
+					Entity e = entities.get(i);
+					g2d.setColor(e.c);
+					g2d.fillPolygon(e.getRotatedPolygon());
+				}
+				for(int i = 0; i < bullets.size();i++){
+					g2d.setColor(Color.BLUE);
+					Bullet e = bullets.get(i);
+					g2d.fillPolygon(e.getRotatedPolygon());
+				}
+				g2d.setColor(Color.BLUE);
+				g2d.drawString(ship.health + "", getWidth() / 2,  getHeight() / 2);
 
 	}
 	public ArrayList<Entity> getTargets(){
 		ArrayList<Entity> e = new ArrayList<Entity>();
 
 		e.addAll(entities);
+		e.add(ship);
 		return e;
 	}
 	public void update(){
@@ -143,10 +144,13 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 			Bullet b = bullets.get(i);
 			for(int j = 0; j < entities.size();j++){
 				Entity e = entities.get(j);
-				boolean bo = checkCollision(b, e);
-				if(bo && e.team != b.team){
-					e.damage(10);
-					bullets.remove(i);
+				if(!e.dead){
+					boolean bo = checkCollision(b, e);
+					if(bo && e.team != b.team){
+						e.damage(10);
+						bullets.remove(i);
+						break;
+					}
 				}
 			}
 			b.update();
@@ -235,10 +239,15 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 	}
 	@Override
 	public void mousePressed(MouseEvent e) {
-		p2 = e.getPoint();	
-		p2.y -= 40;
-		p2.x -= 10;
+//		p2 = e.getPoint();	
+//		p2.y -= 40;
+//		p2.x -= 10;
+		ship = entities.get(1);
 
+	}
+	public Ship getShipAtLocation(double x, double y){
+		return entities.get(1);
+		
 	}
 	@Override
 	public void mouseReleased(MouseEvent e) {

@@ -16,7 +16,7 @@ public class Enemy extends Ship{
 	double thrustAccuracy = 20;
 	{
 		health = 2;
-		MAX_COOLDOWN = 1000;
+		MAX_COOLDOWN = 100;
 	}
 
 	public Enemy(double x, double y) {
@@ -33,19 +33,24 @@ public class Enemy extends Ship{
 	}
 
 	public void moveToTarget(){
+		if(target == null){
+			return;
+		}
 		double diffAngle = Math.abs((targetAngle - realAngle) % 360);
 		if(diffAngle > 180){
 			diffAngle -= 360;
 		}
 		if(Math.abs(diffAngle)  < thrustAccuracy){
-			double d = GameMath.getDistance(this, target);
+			double d = GameMath.getDistance(this, target); 
 			double tempStrafe = (rand.nextDouble() - 0.5) / 4;
 			if(d > maxDist){
 				thrust(1);
 				strafe(tempStrafe * 5);
 			}
 			else if(d < minDist){
-				shoot();
+				if(diffAngle < shotAccuracy){
+					shoot();
+				}
 				thrust(-1);
 				strafe(tempStrafe * 2);
 			}
@@ -87,24 +92,28 @@ public class Enemy extends Ship{
 		}
 	}
 	public void updateTarget(ArrayList<Entity> array){
-//		target = array.get(0);
+		target = null;
 		double dist = 0;
 		double prevDist = 999999999;
 		for(int i = 0; i < array.size();i++){
-			if(array.get(i).team != this.team || !(array.get(i).dead)){
-				dist = GameMath.getDistance(this, array.get(i));
-				if(dist < prevDist){
-					target = array.get(i);
-					prevDist = dist;
+			Entity e = array.get(i);
+			if(e != this && e.team != this.team){
+				if(!(e.dead)){
+					dist = GameMath.getDistance(this, e);
+					if(dist < prevDist){
+						target = array.get(i);
+						prevDist = dist;
+					}
 				}
 			}
 		}
 	}
 	public void updateAngle(){
-		double xD = target.getX() - getX();
-		double yD = target.getY() - getY() ;
-		targetAngle = Math.toDegrees(Math.atan2(yD, xD));
+		if(target != null){
+			double xD = target.getX() - getX();
+			double yD = target.getY() - getY() ;
+			targetAngle = Math.toDegrees(Math.atan2(yD, xD));
+		}
 	}
-
 
 }

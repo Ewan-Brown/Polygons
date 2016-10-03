@@ -17,11 +17,11 @@ public class Bullet extends Entity {
 		}
 	}
 	
-	public Bullet(double x, double y,double angle,int team){
+	public Bullet(double x, double y,double angle,int team,double barrelSpeed){
 		super(x,y,0,0);
 		this.realAngle = angle;
 		this.team = team;
-		thrust(40);
+		thrust(barrelSpeed);
 	}
 	public void update(){
 		super.update();

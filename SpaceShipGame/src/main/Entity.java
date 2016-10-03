@@ -50,7 +50,7 @@ public class Entity extends AbstractShip{
 		}
 	}
 	public void onDeath(){
-		c = Color.RED;
+		c = Color.GRAY;
 		dead = true;
 	}
 	public void onCollide(Entity e){

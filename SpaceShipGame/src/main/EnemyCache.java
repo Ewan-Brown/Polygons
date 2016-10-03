@@ -2,13 +2,13 @@ package main;
 
 import java.awt.Color;
 import java.awt.Point;
-import java.awt.Shape;
+//import java.awt.Shape;
 import java.util.Hashtable;
 
 public class EnemyCache {
 
 	private static Hashtable<String, Enemy> entityMap  = new Hashtable<String, Enemy>();
-	public static String[] types = {"light","medium","kamikaze"};
+	public static String[] types = {"light","medium","kamikaze","sniper"};
 	public static void loadCache(){
 		Enemy light = new Enemy(0,0){{
 			MAX_COOLDOWN = 20;
@@ -16,6 +16,7 @@ public class EnemyCache {
 			c = Color.CYAN;
 			speed = 0.02;
 			turnSpeed = 3;
+			turnAccuracy = 5;
 			points = new Point[7];
 			points[0] = new Point(12,6);
 			points[1] = new Point(4,8);
@@ -32,6 +33,30 @@ public class EnemyCache {
 				tempPoints[i] = new Point(0,0);
 			}
 			
+		}};
+		Enemy sniper = new Enemy(0,0){{
+			barrelSpeed = 200;
+			minDist = 100;
+			maxDist = 1000;
+			points = new Point[11];
+			points[0] = new Point(0,0);
+			points[1] = new Point(4,0);
+			points[2] = new Point(4,2);
+			points[3] = new Point(6,4);
+			points[4] = new Point(6,8);
+			points[5] = new Point(4,10);
+			points[6] = new Point(12,10);
+			points[7] = new Point(12,12);
+			points[8] = new Point(4,12);
+			points[9] = new Point(2,14);
+			points[10] = new Point(0,14);
+
+			turrets = new Point[1];
+			turrets[0] = points[8];
+			tempPoints = new Point[points.length];
+			for(int i = 0; i < points.length;i++){
+				tempPoints[i] = new Point(0,0);
+			}
 		}};
 		Enemy kamikaze = new Enemy(0,0){
 			public void onCollide(Entity e){
@@ -99,6 +124,7 @@ public class EnemyCache {
 		entityMap.put("light", light);
 		entityMap.put("medium", medium);		
 		entityMap.put("kamikaze", kamikaze);
+		entityMap.put("sniper", sniper);
 
 
 
