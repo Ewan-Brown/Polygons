@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Random;
 
 
@@ -52,6 +53,12 @@ public class Entity extends AbstractShip{
 	public void onDeath(){
 		c = Color.GRAY;
 		dead = true;
+		ArrayList<Particle> a = new ArrayList<Particle>();
+		for(int i = 0; i < 10;i++){
+			Particle p = new Particle(this.getX(),this.getY(),(rand.nextDouble() - 0.5) * 4,(rand.nextDouble() - 0.5) * 4);
+			a.add(p);
+		}
+		gameInstance.addParticles(a);
 	}
 	public void onCollide(Entity e){
 		

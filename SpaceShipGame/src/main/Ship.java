@@ -9,6 +9,7 @@ import java.awt.geom.Point2D;
 public class Ship extends Entity{
 
 
+	boolean playerControl = false;
 	int cooldown = 0;
 	int MAX_COOLDOWN = 10;
 	double barrelSpeed = 40;

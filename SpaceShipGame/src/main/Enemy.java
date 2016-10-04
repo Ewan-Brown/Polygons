@@ -26,10 +26,12 @@ public class Enemy extends Ship{
 
 	public void update(){
 		super.update();
-		updateTarget(gameInstance.getTargets());
-		updateAngle();
-		turnToTarget();
-		moveToTarget();
+		if(!playerControl){
+			updateTarget(gameInstance.getTargets());
+			updateAngle();
+			turnToTarget();
+			moveToTarget();
+		}
 	}
 
 	public void moveToTarget(){
