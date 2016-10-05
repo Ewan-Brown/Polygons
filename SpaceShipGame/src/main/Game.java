@@ -35,6 +35,14 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 	ArrayList<Ship> entities = new ArrayList<Ship>();
 	ArrayList<Bullet> bullets = new ArrayList<Bullet>();
 	ArrayList<Particle> particleArray = new ArrayList<Particle>();
+	boolean lockOn = true;
+	int[] cooldown = new int[1];
+	int x;
+	int y;
+	int minX = 0;
+	int maxX = 3000;
+	int minY = 0;
+	int maxY = 3000;
 	public Point p2 = new Point(0,0);
 	Timer t;
 	public static void main(String[] args){
@@ -54,7 +62,7 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 			game.doKeys();
 			game.update();
 			try {
-				Thread.sleep(10);
+				Thread.sleep(7);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -69,27 +77,29 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 		entities.add(e);
 	}
 	public void init(){
+		cooldown[0] = 100;
 		t = new Timer(1000,this);
 		t.start();
-		ship = new Ship(0,0);
+		//		ship = new Ship(0,0);
 		EnemyCache.loadCache();
-		int n = 100;
+		int n = 50;
 		for(int i = 0; i < n;i++){
 			Enemy e = randomEnemy();
-			e.setPosition(rand.nextInt(getWidth() / 4),rand.nextInt(getHeight()));
+//			e.setPosition(rand.nextInt(getWidth() / 4),rand.nextInt(getHeight()));
+			e.setPosition(rand.nextInt(getWidth()),rand.nextInt(getHeight()));
 			e.team = 2;
 			e.c = Color.BLUE;
 			entities.add(e);
 		}
 		for(int i = 0; i < n;i++){
 			Enemy e = randomEnemy();
-			e.setPosition(rand.nextInt(getWidth() / 4 ) + (getWidth() / 2),rand.nextInt(getHeight()));
+//			e.setPosition(rand.nextInt(getWidth() / 2 ) + (getWidth() / 2),rand.nextInt(getHeight()));
+			e.setPosition(rand.nextInt(getWidth()),rand.nextInt(getHeight()));
 			e.team = 3;
+			e.realAngle -= 180;
 			e.c = Color.RED;
 			entities.add(e);
 		}
-		particleArray.add(new Particle(100,100,1,1));
-		entities.add(ship);
 	}
 	public Enemy randomEnemy(){
 		String s;
@@ -106,12 +116,18 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 				g2d.setColor(Color.RED);
 				for(int i = 0; i < entities.size();i++){
 					Entity e = entities.get(i);
-					g2d.setColor(e.c);
+					if(e == ship){
+						g2d.setColor(Color.GREEN);
+					}				
+					else{
+						g2d.setColor(e.c);
+					}
+
 					g2d.fillPolygon(e.getRotatedPolygon());
 				}
 				for(int i = 0; i < bullets.size();i++){
-					g2d.setColor(Color.BLUE);
 					Bullet e = bullets.get(i);
+					g2d.setColor(e.c);
 					g2d.fillPolygon(e.getRotatedPolygon());
 				}
 				for(int i = 0; i < particleArray.size();i++){
@@ -120,7 +136,6 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 					g2d.fillPolygon(p.getRotatedPolygon());
 				}
 				g2d.setColor(Color.BLUE);
-				g2d.drawString(ship.health + "", getWidth() / 2,  getHeight() / 2);
 
 	}
 	public void addParticles(ArrayList<Particle> a){
@@ -130,7 +145,9 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 		ArrayList<Entity> e = new ArrayList<Entity>();
 
 		e.addAll(entities);
-		e.add(ship);
+		if(ship != null){
+			e.add(ship);
+		}
 		return e;
 	}
 	public void update(){
@@ -143,8 +160,10 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 				e1.update();
 				for(int j = i; j < entities.size();j++){
 					Entity e2 = entities.get(j);
-					if(checkCollision(e1, e2)){
-						e1.onCollide(e2);
+					if(!e2.dead){
+						if(checkCollision(e1, e2)){
+							e1.onCollide(e2);
+						}
 					}
 				}
 			}
@@ -157,7 +176,7 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 				if(!e.dead){
 					boolean bo = checkCollision(b, e);
 					if(bo && e.team != b.team){
-						e.damage(10);
+						e.damage(b.calibre);
 						bullets.remove(i);
 						break;
 					}
@@ -213,7 +232,10 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 		}
 	}
 	public void doKeys(){
-		if(!ship.dead){
+		for(int i = 0; i < cooldown.length;i++){
+			cooldown[i]--;
+		}
+		if(ship != null && !ship.dead){
 			if(keySet.get(KeyEvent.VK_W)){
 				ship.thrust(1);
 			}
@@ -234,6 +256,12 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 			}
 			if(keySet.get(KeyEvent.VK_F)){
 				ship.shoot();
+			}
+			if(keySet.get(KeyEvent.VK_T)){
+				if(cooldown[0] < 0){
+					cooldown[0] = 100;
+					lockOn = !lockOn;
+				}
 			}
 		}
 	}
@@ -265,10 +293,12 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 		for(int i = 0; i < entities.size();i++){
 			Ship en = entities.get(i);
 			en.playerControl = false;
-			if(GameMath.getDistance(en.getX(), en.getY(), p2.getX(), p2.getY()) < dist){
-				dist = GameMath.getDistance(en.getX(), en.getY(), p2.getX(), p2.getY());
-				System.out.println(en.getX() + " " + en.getY());
-				ship = (Ship) en;
+			if(!en.dead){
+				if(GameMath.getDistance(en.getX(), en.getY(), p2.getX(), p2.getY()) < dist){
+					dist = GameMath.getDistance(en.getX(), en.getY(), p2.getX(), p2.getY());
+					System.out.println(en.getX() + " " + en.getY());
+					ship = (Ship) en;
+				}
 			}
 		}
 		ship.playerControl = true;

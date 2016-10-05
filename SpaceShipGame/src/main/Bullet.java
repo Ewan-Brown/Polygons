@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.Color;
 import java.awt.Point;
 
 public class Bullet extends Entity {
@@ -16,12 +17,15 @@ public class Bullet extends Entity {
 			tempPoints[i] = new Point(0,0);
 		}
 	}
+	public int calibre = 0;
 	
-	public Bullet(double x, double y,double angle,int team,double barrelSpeed){
+	public Bullet(double x, double y,double angle,int team,double barrelSpeed,int calibre,Color c){
 		super(x,y,0,0);
 		this.realAngle = angle;
 		this.team = team;
 		thrust(barrelSpeed);
+		this.calibre = calibre;
+		this.c = c;
 	}
 	public void update(){
 		super.update();

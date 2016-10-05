@@ -51,7 +51,10 @@ public class Entity extends AbstractShip{
 		}
 	}
 	public void onDeath(){
-		c = Color.GRAY;
+		int r = c.getRed();
+		int g = c.getGreen();
+		int b = c.getBlue();
+		c = new Color(r,g,b,80);
 		dead = true;
 		ArrayList<Particle> a = new ArrayList<Particle>();
 		for(int i = 0; i < 10;i++){

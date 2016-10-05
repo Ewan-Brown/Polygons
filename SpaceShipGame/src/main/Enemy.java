@@ -27,10 +27,15 @@ public class Enemy extends Ship{
 	public void update(){
 		super.update();
 		if(!playerControl){
+			moveToTarget();
 			updateTarget(gameInstance.getTargets());
 			updateAngle();
 			turnToTarget();
-			moveToTarget();
+		}
+		else if(gameInstance.lockOn){
+			updateTarget(gameInstance.getTargets());
+			updateAngle();
+			turnToTarget();
 		}
 	}
 

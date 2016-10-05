@@ -13,6 +13,7 @@ public class Ship extends Entity{
 	int cooldown = 0;
 	int MAX_COOLDOWN = 10;
 	double barrelSpeed = 40;
+	int caliber = 10;
 	Point[] turrets = new Point[0];
 
 	{
@@ -45,7 +46,7 @@ public class Ship extends Entity{
 
 	public Ship(int x, int y){
 		super(x,y,0,0);
-		team = 2;
+		team = 1;
 		health = 100000000;
 
 	}
@@ -61,8 +62,7 @@ public class Ship extends Entity{
 			for(int i = 0; i < p.length;i++){
 				double x = p[i].x + getTrueX();
 				double y = p[i].y + getTrueY();
-				Bullet b = new Bullet(x,y,realAngle,this.team,barrelSpeed);
-				b.c = this.c;
+				Bullet b = new Bullet(x,y,realAngle,this.team,barrelSpeed,this.caliber,c);
 				bA[i] = b;
 			}
 			gameInstance.addBullets(bA);
