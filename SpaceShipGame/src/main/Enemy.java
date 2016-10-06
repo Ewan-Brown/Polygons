@@ -47,7 +47,7 @@ public class Enemy extends Ship{
 		if(diffAngle > 180){
 			diffAngle -= 360;
 		}
-		if(Math.abs(diffAngle)  < thrustAccuracy){
+//		if(Math.abs(diffAngle)  < thrustAccuracy){
 			double d = GameMath.getDistance(this, target); 
 			double tempStrafe = (rand.nextDouble() - 0.5) / 4;
 			if(d > maxDist){
@@ -79,15 +79,15 @@ public class Enemy extends Ship{
 					}
 				}
 			}
-		}
+//		}
 	}
 	public void turnToTarget(){
 		double a = targetAngle - realAngle;
 		a = a % 360;
 		double diffAngle = Math.abs((targetAngle - realAngle) % 360);
-		if(diffAngle < turnAccuracy){
-			return;
-		}
+//		if(diffAngle < turnAccuracy){
+//			return;
+//		}
 		if(a < 0){
 			a += 360;
 		}

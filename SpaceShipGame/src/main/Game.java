@@ -81,20 +81,21 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 		t = new Timer(1000,this);
 		t.start();
 		//		ship = new Ship(0,0);
+		int f = getWidth();
+		int h = f / 2;
+		int q = h / 2;
 		EnemyCache.loadCache();
-		int n = 50;
+		int n = 20;
 		for(int i = 0; i < n;i++){
 			Enemy e = randomEnemy();
-//			e.setPosition(rand.nextInt(getWidth() / 4),rand.nextInt(getHeight()));
-			e.setPosition(rand.nextInt(getWidth()),rand.nextInt(getHeight()));
+			e.setPosition(rand.nextInt(q),rand.nextInt(getHeight()));
 			e.team = 2;
 			e.c = Color.BLUE;
 			entities.add(e);
 		}
 		for(int i = 0; i < n;i++){
 			Enemy e = randomEnemy();
-//			e.setPosition(rand.nextInt(getWidth() / 2 ) + (getWidth() / 2),rand.nextInt(getHeight()));
-			e.setPosition(rand.nextInt(getWidth()),rand.nextInt(getHeight()));
+			e.setPosition(rand.nextInt(q) + h + q,rand.nextInt(getHeight()));
 			e.team = 3;
 			e.realAngle -= 180;
 			e.c = Color.RED;

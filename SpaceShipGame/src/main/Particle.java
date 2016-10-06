@@ -11,8 +11,8 @@ public class Particle extends Entity{
 	public Particle(double x, double y, double dX, double dY) {
 		super(x, y, dX, dY);
 		c = Color.GREEN;
-		spin = (rand.nextDouble() - 0.5) * 5;
-		int a = rand.nextInt(4);
+		spin = (rand.nextDouble() - 0.5) * 4;
+		int a = rand.nextInt(7);
 		points = new Point[4];
 		points[0] = new Point(0,0);
 		points[1] = new Point(a,0);

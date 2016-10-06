@@ -58,7 +58,7 @@ public class Entity extends AbstractShip{
 		dead = true;
 		ArrayList<Particle> a = new ArrayList<Particle>();
 		for(int i = 0; i < 10;i++){
-			Particle p = new Particle(this.getX(),this.getY(),(rand.nextDouble() - 0.5) * 4,(rand.nextDouble() - 0.5) * 4);
+			Particle p = new Particle(this.getX(),this.getY(),(rand.nextDouble() - 0.5) * 2,(rand.nextDouble() - 0.5) * 2);
 			a.add(p);
 		}
 		gameInstance.addParticles(a);
