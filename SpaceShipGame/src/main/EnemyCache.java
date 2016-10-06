@@ -12,10 +12,10 @@ public class EnemyCache {
 	public static void loadCache(){
 		Enemy light = new Enemy(0,0){{
 			caliber = 5;
-			MAX_COOLDOWN = 7;
-			health = 20;
-			speed = 0.02;
-			turnSpeed = 3;
+			MAX_COOLDOWN = 14;
+			health = 40;
+			speed = 0.01;
+			turnSpeed = 1.5;
 			turnAccuracy = 5;
 			points = new Point[7];
 			points[0] = new Point(24,12);
@@ -35,11 +35,12 @@ public class EnemyCache {
 			
 		}};
 		Enemy sniper = new Enemy(0,0){{
-			barrelSpeed = 200;
+			barrelSpeed = 100;
 			minDist = 500;
 			maxDist = 1000;
 			caliber = 100;
-			MAX_COOLDOWN = 100;
+			health = 20;
+			MAX_COOLDOWN = 200;
 			points = new Point[11];
 			points[0] = new Point(0,0);
 			points[1] = new Point(8,0);
@@ -52,7 +53,6 @@ public class EnemyCache {
 			points[8] = new Point(8,24);
 			points[9] = new Point(4,28);
 			points[10] = new Point(0,28);
-
 			turrets = new Point[1];
 			turrets[0] = points[8];
 			tempPoints = new Point[points.length];
@@ -73,11 +73,11 @@ public class EnemyCache {
 				super.onDeath();
 			}
 			{
-			health = 20;
+			health = 40;
 			maxDist = 0;
 			minDist = 0;
-			speed = 0.03;
-			turnSpeed = 1;
+			speed = 0.015;
+			turnSpeed = 0.5;
 			turnAccuracy = 3;
 			thrustAccuracy = 50;
 			points = new Point[7];
@@ -98,10 +98,10 @@ public class EnemyCache {
 		Enemy medium = new Enemy(0,0){{
 				caliber = 10;
 				
-				health = 50;
-				MAX_COOLDOWN = 40;
-				speed = 0.01;
-				turnSpeed = 1;
+				health = 100;
+				MAX_COOLDOWN = 80;
+				speed = 0.005;
+				turnSpeed = 0.5;
 				strafeChance = 0;
 				minDist = 100;
 				maxDist = 310;

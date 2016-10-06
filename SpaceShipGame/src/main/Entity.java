@@ -29,8 +29,8 @@ public class Entity extends AbstractShip{
 	double dY = 0;
 	public double realAngle = 0;
 	public double targetAngle = 0;
-	double speed = 0.01;
-	double turnSpeed = 1;
+	double speed = 0.005;
+	double turnSpeed = 0.5;
 	Random rand = new Random();
 	int health = 1;
 	boolean dead = false;
@@ -115,7 +115,6 @@ public class Entity extends AbstractShip{
 		y += dY;
 	}
 	public void thrust(double t){
-		//TODO have to subtract 90 degrees here, why???
 		double dX = (Math.cos(Math.toRadians(realAngle)))*speed*t;
 		double dY = (Math.sin(Math.toRadians(realAngle)))*speed*t;
 		this.dX += dX;

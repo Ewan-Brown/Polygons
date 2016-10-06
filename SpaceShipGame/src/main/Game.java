@@ -62,7 +62,7 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 			game.doKeys();
 			game.update();
 			try {
-				Thread.sleep(7);
+				Thread.sleep(3);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

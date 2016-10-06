@@ -12,7 +12,7 @@ public class Ship extends Entity{
 	boolean playerControl = false;
 	int cooldown = 0;
 	int MAX_COOLDOWN = 10;
-	double barrelSpeed = 40;
+	double barrelSpeed = 20;
 	int caliber = 10;
 	Point[] turrets = new Point[0];
 
