@@ -118,9 +118,9 @@ public class EnemyCache {
 				points[9] = new Point(0,28);
 				points[10] = new Point(0,4);
 				points[11] = new Point(4,0);
-				turrets = new Point[2];
-				turrets[0] = points[0];
-				turrets[1] = points[7];
+				turrets = new Point[0];
+//				turrets[0] = points[0];
+//				turrets[1] = points[7];
 				maxRadius = 16;
 				tempPoints = new Point[points.length];
 				for(int i = 0; i < points.length;i++){

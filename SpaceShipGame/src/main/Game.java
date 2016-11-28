@@ -39,6 +39,7 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 	int[] cooldown = new int[1];
 	int x;
 	int y;
+	boolean b = true;
 	int minX = 0;
 	int maxX = 3000;
 	int minY = 0;
@@ -46,7 +47,6 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 	public Point p2 = new Point(0,0);
 	Timer t;
 	public static void main(String[] args){
-
 		JFrame frame = new JFrame();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		game = new Game();
@@ -80,12 +80,11 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 		cooldown[0] = 100;
 		t = new Timer(1000,this);
 		t.start();
-		//		ship = new Ship(0,0);
 		int f = getWidth();
 		int h = f / 2;
 		int q = h / 2;
 		EnemyCache.loadCache();
-		int n = 20;
+		int n = 200;
 		for(int i = 0; i < n;i++){
 			Enemy e = randomEnemy();
 			e.setPosition(rand.nextInt(q),rand.nextInt(getHeight()));
@@ -159,9 +158,9 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 			Entity e1 = entities.get(i);
 			if(!e1.dead){
 				e1.update();
-				for(int j = i; j < entities.size();j++){
+				for(int j = 0; j < entities.size();j++){
 					Entity e2 = entities.get(j);
-					if(!e2.dead){
+					if(i != j && !e2.dead){
 						if(checkCollision(e1, e2)){
 							e1.onCollide(e2);
 						}
@@ -297,7 +296,6 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 			if(!en.dead){
 				if(GameMath.getDistance(en.getX(), en.getY(), p2.getX(), p2.getY()) < dist){
 					dist = GameMath.getDistance(en.getX(), en.getY(), p2.getX(), p2.getY());
-					System.out.println(en.getX() + " " + en.getY());
 					ship = (Ship) en;
 				}
 			}
@@ -307,7 +305,6 @@ public class Game extends JPanel implements KeyListener,MouseListener,ActionList
 	}
 	//	public Ship getShipAtLocation(double x, double y){
 	//		return entities.get(1);
-
 	//	}
 	@Override
 	public void mouseReleased(MouseEvent e) {

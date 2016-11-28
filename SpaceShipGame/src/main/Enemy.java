@@ -47,47 +47,47 @@ public class Enemy extends Ship{
 		if(diffAngle > 180){
 			diffAngle -= 360;
 		}
-//		if(Math.abs(diffAngle)  < thrustAccuracy){
-			double d = GameMath.getDistance(this, target); 
-			double tempStrafe = (rand.nextDouble() - 0.5) / 4;
-			if(d > maxDist){
-				thrust(1);
-				strafe(tempStrafe * 5);
+		//		if(Math.abs(diffAngle)  < thrustAccuracy){
+		double d = GameMath.getDistance(this, target); 
+		double tempStrafe = (rand.nextDouble() - 0.5) / 4;
+		if(d > maxDist){
+			thrust(1);
+			strafe(tempStrafe * 5);
+		}
+		else if(d < minDist){
+			if(diffAngle < shotAccuracy){
+				shoot();
 			}
-			else if(d < minDist){
-				if(diffAngle < shotAccuracy){
-					shoot();
-				}
-				thrust(-1);
-				strafe(tempStrafe * 2);
+			thrust(-1);
+			strafe(tempStrafe * 2);
+		}
+		else{
+			if(diffAngle < shotAccuracy){
+				shoot();
 			}
-			else{
-				if(diffAngle < shotAccuracy){
-					shoot();
+			strafeCount--;
+			if(strafeCount > 0){
+				strafe(strafe);
+			}
+			else if(rand.nextInt() < strafeChance){
+				strafeCount = rand.nextInt(100);
+				if(rand.nextBoolean()){
+					strafe = -1;
 				}
-				strafeCount--;
-				if(strafeCount > 0){
-					strafe(strafe);
-				}
-				else if(rand.nextInt() < strafeChance){
-					strafeCount = rand.nextInt(100);
-					if(rand.nextBoolean()){
-						strafe = -1;
-					}
-					else{
-						strafe = 1;
-					}
+				else{
+					strafe = 1;
 				}
 			}
-//		}
+		}
+		//		}
 	}
 	public void turnToTarget(){
 		double a = targetAngle - realAngle;
 		a = a % 360;
 		double diffAngle = Math.abs((targetAngle - realAngle) % 360);
-//		if(diffAngle < turnAccuracy){
-//			return;
-//		}
+		//		if(diffAngle < turnAccuracy){
+		//			return;
+		//		}
 		if(a < 0){
 			a += 360;
 		}
@@ -101,16 +101,14 @@ public class Enemy extends Ship{
 	public void updateTarget(ArrayList<Entity> array){
 		target = null;
 		double dist = 0;
-		double prevDist = 999999999;
+		double prevDist = Double.MAX_VALUE;
 		for(int i = 0; i < array.size();i++){
 			Entity e = array.get(i);
-			if(e != this && e.team != this.team){
-				if(!(e.dead)){
-					dist = GameMath.getDistance(this, e);
-					if(dist < prevDist){
-						target = array.get(i);
-						prevDist = dist;
-					}
+			if(e != this && e.team != this.team && !(e.dead)){
+				dist = GameMath.getDistance(this, e);
+				if(dist < prevDist){
+					target = array.get(i);
+					prevDist = dist;
 				}
 			}
 		}
